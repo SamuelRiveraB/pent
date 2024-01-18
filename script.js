@@ -118,7 +118,6 @@ function storeDrawn(x, y, size, color, erase) {
     color,
     erase,
   };
-  console.log(line);
   drawnArray.push(line);
 }
 
@@ -147,7 +146,6 @@ canvas.addEventListener('mousedown', (event) => {
 canvas.addEventListener('mousemove', (event) => {
   if (isMouseDown) {
     const currentPosition = getMousePosition(event);
-    console.log('mouse is moving', currentPosition);
     context.lineTo(currentPosition.x, currentPosition.y);
     context.stroke();
     storeDrawn(
@@ -165,12 +163,14 @@ canvas.addEventListener('mousemove', (event) => {
 // Mouse Up
 canvas.addEventListener('mouseup', () => {
   isMouseDown = false;
+  saveStorageBtn.click();
   console.log('mouse is unclicked');
 });
 
 // Save to Local Storage
 saveStorageBtn.addEventListener('click', () => {
   localStorage.setItem('savedCanvas', JSON.stringify(drawnArray))
+  console.log('save button clicked')
   // Active Tool
   activeToolEl.textContent = 'Canvas Saved';
   setTimeout(switchToBrush, 1500);
@@ -188,7 +188,6 @@ loadStorageBtn.addEventListener('click', () => {
     activeToolEl.textContent = "Could not find Canvas"
     setTimeout(switchToBrush, 1500);
   }
-
 });
 
 // Clear Local Storage
@@ -213,3 +212,17 @@ brushIcon.addEventListener('click', switchToBrush);
 
 // On Load
 createCanvas();
+
+// Resize Canvas on window resize
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight - 50;
+  context.fillStyle = bucketColor;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  body.appendChild(canvas);
+  switchToBrush()
+  restoreCanvas()
+}
+
+window.onresize = resizeCanvas
