@@ -1,3 +1,4 @@
+const brush_time = 1500
 const activeToolEl = document.getElementById('active-tool');
 const brushColorBtn = document.getElementById('brush-color');
 const brushIcon = document.getElementById('brush');
@@ -89,7 +90,7 @@ clearCanvasBtn.addEventListener('click', () => {
   drawnArray = [];
   // Active Tool
   activeToolEl.textContent = 'Canvas Cleared';
-  setTimeout(switchToBrush, 1500);
+  tmBrush(1500)
 });
 
 // Draw what is stored in DrawnArray
@@ -173,7 +174,7 @@ saveStorageBtn.addEventListener('click', () => {
   console.log('save button clicked')
   // Active Tool
   activeToolEl.textContent = 'Canvas Saved';
-  setTimeout(switchToBrush, 1500);
+  tmBrush(1500)
 });
 
 // Load from Local Storage
@@ -183,10 +184,10 @@ loadStorageBtn.addEventListener('click', () => {
     restoreCanvas()
   // Active Tool
     activeToolEl.textContent = 'Canvas Loaded';
-    setTimeout(switchToBrush, 1500);
+    tmBrush(1500)
   } else {
     activeToolEl.textContent = "Could not find Canvas"
-    setTimeout(switchToBrush, 1500);
+    tmBrush(1500)
   }
 });
 
@@ -195,7 +196,7 @@ clearStorageBtn.addEventListener('click', () => {
   localStorage.removeItem('savedCanvas')
   // Active Tool
   activeToolEl.textContent = 'Local Storage Cleared';
-  setTimeout(switchToBrush, 1500);
+  tmBrush(1500)
 });
 
 // Download Image
@@ -204,7 +205,7 @@ downloadBtn.addEventListener('click', () => {
   downloadBtn.download = 'paint-example.jpeg'
   // Active Tool
   activeToolEl.textContent = 'Image File Saved';
-  setTimeout(switchToBrush, 1500);
+  tmBrush(1500)
 });
 
 // Event Listener
@@ -213,16 +214,10 @@ brushIcon.addEventListener('click', switchToBrush);
 // On Load
 createCanvas();
 
-// Resize Canvas on window resize
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight - 50;
-  context.fillStyle = bucketColor;
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  body.appendChild(canvas);
-  switchToBrush()
-  restoreCanvas()
+function tmBrush(tm) {
+  setTimeout(switchToBrush, tm);
 }
 
-window.onresize = resizeCanvas
+// Resize Canvas on window resize
+
+window.onresize = () => { createCanvas(); restoreCanvas() }
